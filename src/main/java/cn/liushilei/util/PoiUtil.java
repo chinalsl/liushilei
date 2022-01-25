@@ -9,48 +9,32 @@ import java.io.*;
 
 public class PoiUtil {
 
-    /**
-     * word Converter pdf
-     *
-     * @param wordPath word文件路径
-     * @param wordName word文件名称无后缀
-     * @param suffix   word文件后缀
-     * @return
-     * @throws IOException
-     */
-    public static String docxToPdf(String wordPath, String wordName, String suffix)
+
+    public static void docxToPdf(String wordPath, String pdfPath)
             throws IOException {
         ZipSecureFile.setMinInflateRatio(-1.0d);
-        String htmlPath = wordPath + File.separator + "pdf"
-                + File.separator;
-        String htmlName = wordName + ".pdf";
-        String imagePath = htmlPath + "image" + File.separator;
-
-        // 判断html文件是否存在
-        File htmlFile = new File(htmlPath + htmlName);
-
-
+        File pdfFile = new File(pdfPath);
         // word文件
-        File wordFile = new File(wordPath + File.separator + wordName + suffix);
+        File wordFile = new File(wordPath);
 
         // 1) 加载word文档生成 XWPFDocument对象
         InputStream in = new FileInputStream(wordFile);
         XWPFDocument document = new XWPFDocument(in);
 
-        // 2) 解析 XHTML配置 (这里设置IURIResolver来设置图片存放的目录)
-        File imgFolder = new File(imagePath);
-        //  带图片的word，则将图片转为base64编码，保存在一个页面中
         PdfOptions options = PdfOptions.create();
-        // 3) 将 XWPFDocument转换成XHTML
-        // 生成html文件上级文件夹
-        File folder = new File(htmlPath);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-        OutputStream out = new FileOutputStream(htmlFile);
+
+        OutputStream out = new FileOutputStream(pdfFile);
         PdfConverter.getInstance().convert(document, out, options);
 
-        return htmlFile.getAbsolutePath();
+    }
+
+
+    public static void main(String[] args) {
+        try {
+            docxToPdf("C:\\Users\\houyibing\\Desktop\\我是初号字体.docx","C:\\Users\\houyibing\\Desktop\\我是初号字体.pdf");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
