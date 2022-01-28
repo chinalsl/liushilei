@@ -16,6 +16,7 @@
             <name>liushilei</name>
             <email>237224320@qq.com</email>
             <url>https://github.com/chinalsl/liushilei</url>
+            <organization>北京宝兰德软件股份有限公司</organization>
         </developer>
     </developers>
 
@@ -36,6 +37,9 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <poi.version>5.2.0</poi.version>
+        <xdocreport.version>2.0.4-SNAPSHOT</xdocreport.version>
+<!--        <poi.version>4.1.2</poi.version>
+        <xdocreport.version>2.0.2</xdocreport.version>-->
     </properties>
 
 
@@ -58,59 +62,49 @@
             <version>${poi.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.xmlbeans</groupId>
-            <artifactId>xmlbeans</artifactId>
-            <version>5.0.3</version>
-        </dependency>
-
-        <dependency>
+<!--        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml-schemas</artifactId>
-            <version>4.1.2</version>
-        </dependency>
-
-<!--        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>ooxml-schemas</artifactId>
-            <version>1.4</version>
-        </dependency>-->
-
-
-<!--        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>ooxml-schemas</artifactId>
-            <version>1.4</version>
+            <version>${poi.version}</version>
         </dependency>-->
 
         <dependency>
             <groupId>fr.opensagres.xdocreport</groupId>
             <artifactId>fr.opensagres.poi.xwpf.converter.xhtml</artifactId>
-            <version>2.0.2</version>
+            <version>${xdocreport.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>fr.opensagres.xdocreport</groupId>
             <artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
-            <version>2.0.2</version>
+            <version>${xdocreport.version}</version>
         </dependency>
 
 
+        <dependency>
+            <groupId>fr.opensagres.xdocreport</groupId>
+            <artifactId>fr.opensagres.poi.xwpf.converter.pdf-gae</artifactId>
+            <version>${xdocreport.version}</version>
+        </dependency>
 
-
-
-<!--        <dependency>
-            <groupId>org.apache.xmlbeans</groupId>
-            <artifactId>xmlbeans</artifactId>
-            <version>3.1.0</version>
-        </dependency>-->
-
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.2</version>
+        </dependency>
 
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.7.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
