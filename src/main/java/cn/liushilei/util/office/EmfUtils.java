@@ -94,19 +94,27 @@ public class EmfUtils {
         return null;
     }
 
+    /**
+     * emf文字提取
+     * @param inputStream
+     * @return
+     */
     public static String emfText(InputStream inputStream) {
-
         byte[] bytes = emf2svg(inputStream).toByteArray();
         String svgStr = new String(bytes);
-        System.out.println(UnicodeUtil.toString(svgStr));
-        System.out.println(unescape(svgStr));
+        //emf转xml
         Document document = XmlUtil.readXML("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" + UnicodeUtil.toString(svgStr));
-        NodeList svg = document.getElementsByTagName("svg");
+        //提取emf中的文字
+        NodeList svg = document.getElementsByTagName("text");
         if (svg != null && svg.getLength() > 0) {
-            System.out.println(svg.item(0).getFirstChild().getNodeValue());
+            StringBuffer stringBuffer = new StringBuffer();
+            //防止换行
+            for(int i=0 ; i < svg.getLength();i++){
+                String nodeValue = svg.item(i).getFirstChild().getNodeValue();
+                stringBuffer.append(nodeValue);
+            }
+            return stringBuffer.toString();
         }
-
-
         return null;
     }
 
@@ -134,35 +142,6 @@ public class EmfUtils {
         return tmp.toString();
     }
 
-    public static String unescape(String src) {
-        StringBuffer tmp = new StringBuffer();
-        tmp.ensureCapacity(src.length());
-        int lastPos = 0, pos = 0;
-        char ch;
-        while (lastPos < src.length()) {
-            pos = src.indexOf("%", lastPos);
-            if (pos == lastPos) {
-                if (src.charAt(pos + 1) == 'u') {
-                    ch = (char) Integer.parseInt(src.substring(pos + 2, pos + 6), 16);
-                    tmp.append(ch);
-                    lastPos = pos + 6;
-                } else {
-                    ch = (char) Integer.parseInt(src.substring(pos + 1, pos + 3), 16);
-                    tmp.append(ch);
-                    lastPos = pos + 3;
-                }
-            } else {
-                if (pos == -1) {
-                    tmp.append(src.substring(lastPos));
-                    lastPos = src.length();
-                } else {
-                    tmp.append(src.substring(lastPos, pos));
-                    lastPos = pos;
-                }
-            }
-        }
-        return tmp.toString();
-    }
 
 
 

@@ -1,25 +1,25 @@
 package cn.liushilei.util.office.xwordreport;
 
+import cn.hutool.core.io.FileUtil;
+import cn.liushilei.util.office.DocxUtils;
+import cn.liushilei.util.office.ImageUtils;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.microsoft.schemas.vml.impl.CTShapeImpl;
 import fr.opensagres.poi.xwpf.converter.core.ImageShapeStyle;
-import fr.opensagres.poi.xwpf.converter.core.utils.StringUtils;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import fr.opensagres.poi.xwpf.converter.pdf.internal.PdfMapper;
 import fr.opensagres.poi.xwpf.converter.pdf.utils.EmfUtils;
 import fr.opensagres.xdocreport.itext.extension.IITextContainer;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.xmlbeans.SchemaField;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
+import org.openxmlformats.schemas.officeDocument.x2006.math.impl.CTTextImpl;
 import org.openxmlformats.schemas.officeDocument.x2006.relationships.impl.STRelationshipIdImpl;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.impl.CTObjectImpl;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTText;
 
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
@@ -163,13 +163,56 @@ public class PdfOverwrite extends PdfMapper {
         }
 
         try {
-            cn.liushilei.util.office.EmfUtils.emfText(new ByteArrayInputStream(pictureData.getData()));
+            String emfText = cn.liushilei.util.office.EmfUtils.emfText(new ByteArrayInputStream(pictureData.getData()));
+            //获取类型
+            String type = emfText.substring(emfText.lastIndexOf(".") + 1).toLowerCase();
 
-            byte[] bytes = EmfUtils.emf2Image(new ByteArrayInputStream(pictureData.getData()));
-            Image img = Image.getInstance(bytes);
+            byte[] pictureBytes = null;
+
+
+            String path = PdfOverwrite.class.getResource("/png").getPath();
+
+            System.out.println(type);
+            switch (type){
+                case "xls":
+                    pictureBytes = ImageUtils.createIco(path+"/xls.png",emfText);
+                    break;
+                case "xlsx":
+                    pictureBytes = ImageUtils.createIco(path+"/xls.png",emfText);
+                    break;
+                case "docx":
+                    pictureBytes = ImageUtils.createIco(path+"/doc.png",emfText);
+                    break;
+                case "doc":
+                    pictureBytes = ImageUtils.createIco(path+"/doc.png",emfText);
+                    break;
+                case "pptx":
+                    pictureBytes = ImageUtils.createIco(path+"/ppt.png",emfText);
+                    break;
+                case "ppt":
+                    pictureBytes = ImageUtils.createIco(path+"/ppt.png",emfText);
+                    break;
+                case "txt":
+                    pictureBytes = ImageUtils.createIco(path+"/txt.png",emfText);
+                    break;
+                case "zip":
+                    pictureBytes = ImageUtils.createIco(path+"/zip.png",emfText);
+                    break;
+                case "rar":
+                    pictureBytes = ImageUtils.createIco(path+"/zip.png",emfText);
+                    break;
+                case "tar":
+                    pictureBytes = ImageUtils.createIco(path+"/zip.png",emfText);
+                    break;
+                default:
+                    pictureBytes = EmfUtils.emf2Image(new ByteArrayInputStream(pictureData.getData()));
+            }
+
+            Image img = Image.getInstance(pictureBytes);
 
             ImageShapeStyle imageStyle = ImageShapeStyle.parse(style);
-            img.scaleAbsolute(imageStyle.getWidth(), imageStyle.getHeight());
+            img.scaleAbsolute(imageStyle.getWidth()>100f?100f:imageStyle.getWidth(), imageStyle.getHeight()>100f?100f:imageStyle.getHeight());
+//            img.scaleAbsolute(100f, 100f);
             IITextContainer parentOfParentContainer = pdfParentContainer.getITextContainer();
             if (parentOfParentContainer != null && parentOfParentContainer instanceof PdfPCell) {
                 pdfParentContainer.addElement(img);
@@ -180,7 +223,6 @@ public class PdfOverwrite extends PdfMapper {
                     Paragraph paragraph = (Paragraph) pdfParentContainer;
                     paragraph.setSpacingBefore(paragraph.getSpacingBefore() + 5.0F);
                 }
-
                 pdfParentContainer.addElement(new Chunk(img, chunkOffsetX, chunkOffsetY, false));
             }
         } catch (Exception ex) {
