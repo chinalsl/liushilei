@@ -90,14 +90,7 @@ public class DocxUtils extends WordService {
                     // 配置字体
                     Font font = null;
                     try {
-                        // 方案一：使用本地字体(本地需要有字体)
-//                        BaseFont bf = BaseFont.createFont("c:/Windows/Fonts/simsun.ttc,0", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//                                BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/seguisym.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                        // 方案二：使用jar包：iTextAsian，这样只需一个jar包就可以了
-//                    BaseFont bf = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.EMBEDDED);
-
                         BaseFont bf = BaseFont.createFont(DocxUtils.class.getResource("/font").getPath()+"/simsun.ttc,0", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
                         Font fontChinese = new Font(bf, size, style, color);
                         if (familyName != null){
                             fontChinese.setFamily(familyName);
